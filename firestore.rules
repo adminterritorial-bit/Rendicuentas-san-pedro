@@ -1,0 +1,181 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function ownProfileExists() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function ownProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function legacyProfileExists() {
+      return signedIn()
+        && request.auth.token.email != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.token.email));
+    }
+
+    function legacyProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.token.email)).data;
+    }
+
+    function profileRole(profile) {
+      return profile.get(
+        'role',
+        profile.get(
+          'rol',
+          profile.get('tipoUsuario', profile.get('userRole', 'guest'))
+        )
+      );
+    }
+
+    function profileIsActive(profile) {
+      return profile.get('active', true) == true;
+    }
+
+    function activeRole(allowedRoles) {
+      return (
+          ownProfileExists()
+          && profileIsActive(ownProfile())
+          && profileRole(ownProfile()) in allowedRoles
+        ) || (
+          legacyProfileExists()
+          && profileIsActive(legacyProfile())
+          && profileRole(legacyProfile()) in allowedRoles
+        );
+    }
+
+    function isEditor() {
+      return activeRole([
+        'super_admin', 'super-admin', 'super admin', 'superadmin',
+        'Super Admin', 'super administrador', 'administrador principal',
+        'admin', 'administrador', 'editor'
+      ]);
+    }
+
+    function isSuperAdmin() {
+      return activeRole([
+        'super_admin', 'super-admin', 'super admin', 'superadmin',
+        'Super Admin', 'super administrador', 'administrador principal'
+      ]);
+    }
+
+    function isOwnUserDocument(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function isOwnLegacyEmailDocument(userId) {
+      return signedIn()
+        && request.auth.token.email != null
+        && request.auth.token.email == userId;
+    }
+
+    function validGuestCreate(userId) {
+      return isOwnUserDocument(userId)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.role == 'guest'
+        && request.resource.data.active == true
+        && request.resource.data.email == request.auth.token.email;
+    }
+
+    function validOwnProfileUpdate() {
+      return request.resource.data.get('uid', '') == resource.data.get('uid', '')
+        && profileRole(request.resource.data) == profileRole(resource.data)
+        && request.resource.data.get('active', true) == resource.data.get('active', true)
+        && request.resource.data.get('email', '') == resource.data.get('email', '')
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'displayName',
+          'phone',
+          'neighborhood',
+          'emailVerified',
+          'lastLoginAt',
+          'updatedAt'
+        ]);
+    }
+
+    function validPublicIdeaCreate() {
+      return request.resource.data.keys().hasOnly([
+          'title',
+          'author',
+          'location',
+          'category',
+          'description',
+          'status',
+          'response',
+          'votes',
+          'created',
+          'createdBy',
+          'createdByEmail',
+          'createdAt'
+        ])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 2
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.author is string
+        && request.resource.data.author.size() > 1
+        && request.resource.data.author.size() <= 120
+        && request.resource.data.location is string
+        && request.resource.data.location.size() <= 120
+        && request.resource.data.category is string
+        && request.resource.data.category.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 5
+        && request.resource.data.description.size() <= 1200
+        && request.resource.data.status == 'recibida'
+        && request.resource.data.response == ''
+        && request.resource.data.votes == 0;
+    }
+
+    // Compatibilidad de solo lectura con el documento histórico portal/main.
+    match /portal/{documentId} {
+      allow read: if true;
+      allow write: if isEditor();
+    }
+
+    // Nuevo almacenamiento dividido por secciones. Evita arreglos anidados,
+    // campos reservados y el límite de guardar todo el portal en un documento.
+    match /portalState/{documentId} {
+      allow read: if true;
+      allow create, update, delete: if isEditor();
+    }
+
+    // Ediciones contextuales separadas por bloque/página.
+    match /portalEdits/{documentId} {
+      allow read: if true;
+      allow create, update, delete: if isEditor();
+    }
+
+    match /ideas/{ideaId} {
+      allow read: if true;
+      allow create: if isEditor() || validPublicIdeaCreate();
+      allow update, delete: if isEditor();
+    }
+
+    match /users/{userId} {
+      allow get: if isOwnUserDocument(userId)
+        || isOwnLegacyEmailDocument(userId)
+        || isSuperAdmin();
+      allow list: if isSuperAdmin();
+      allow create: if isSuperAdmin() || validGuestCreate(userId);
+      allow update: if isSuperAdmin()
+        || (isOwnUserDocument(userId) && validOwnProfileUpdate());
+      allow delete: if isSuperAdmin();
+    }
+
+    match /auditLogs/{logId} {
+      allow create: if isEditor();
+      allow read: if isSuperAdmin();
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

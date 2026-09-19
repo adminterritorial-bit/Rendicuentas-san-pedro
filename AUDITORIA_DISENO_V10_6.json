@@ -1,0 +1,56 @@
+{
+  "version": "10.6",
+  "objective": "Elevar el portal a una experiencia editorial e institucional inmersiva sin romper funcionalidad.",
+  "reference_patterns": {
+    "Pentagram": [
+      "tipografía editorial de alto impacto",
+      "grillas modulares",
+      "movimiento como parte del lenguaje visual"
+    ],
+    "Locomotive": [
+      "experiencias digitales inmersivas",
+      "profundidad por capas",
+      "microinteracciones y filtros visuales"
+    ],
+    "Apple HIG": [
+      "alineación consistente",
+      "materiales que separan contenido y fondo",
+      "cierres de panel claros y familiares"
+    ],
+    "Material Design 3": [
+      "jerarquía de botones",
+      "movimiento responsivo",
+      "duraciones distintas para acciones pequeñas y transiciones"
+    ],
+    "USWDS": [
+      "modales contenidos",
+      "tarjetas con un único tema",
+      "botones con superficie seleccionable amplia",
+      "reducción de movimiento y foco accesible"
+    ],
+    "User references": [
+      "hero inmersivo por capas",
+      "paneles flotantes",
+      "tarjetas con profundidad",
+      "transiciones orgánicas entre secciones"
+    ]
+  },
+  "changes": [
+    "atmósfera visual global sin interferir con lectura",
+    "hero reactivo al puntero con movimiento ligero",
+    "separadores orgánicos entre secciones",
+    "tarjetas con esquina editorial y luz contextual",
+    "jerarquía de botones con contraste explícito",
+    "cierres azules consistentes de 44 px",
+    "cabeceras y acciones sticky en ventanas",
+    "consola e inspector refinados",
+    "animaciones de entrada y cambio de panel",
+    "contraste corregido en superficies claras",
+    "reducción de movimiento respetada"
+  ],
+  "javascript": {
+    "shared.js": "OK",
+    "inline-admin.js": "OK"
+  },
+  "css_braces_balanced": true
+}

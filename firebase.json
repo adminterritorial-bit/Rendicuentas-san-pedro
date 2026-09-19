@@ -1,0 +1,27 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "firestore.rules",
+      "**/.*",
+      "**/node_modules/**",
+      "**/*.md",
+      "QA_*.json",
+      "version-*.txt",
+      "verificar-firebase.mjs"
+    ],
+    "cleanUrls": false,
+    "trailingSlash": false
+  },
+  "emulators": {
+    "firestore": {
+      "host": "127.0.0.1",
+      "port": 8185
+    }
+  }
+}

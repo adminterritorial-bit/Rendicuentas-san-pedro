@@ -1,0 +1,70 @@
+{
+  "version": "13.0.0-firebase-restored",
+  "criticalFiles": {
+    "territory-experience.js": {
+      "exists": true,
+      "bytes": 61993,
+      "sha256": "3773a39e369697e1b6d596760a819702f485a68e2f19fda1bb25663afb9fe90a"
+    },
+    "territory-map-engine.js": {
+      "exists": true,
+      "bytes": 17472,
+      "sha256": "6308c873fa2b6d2d326eb5d506d8dc14c5c569462c211626b10c079bfa1345e3"
+    },
+    "san-pedro-connected.js": {
+      "exists": true,
+      "bytes": 438,
+      "sha256": "bf77c51c5b6761cab7f1cfbec58a0203b6c4dcae54b744cc3e01898db75212d9"
+    },
+    "san-pedro-connected.css": {
+      "exists": true,
+      "bytes": 54,
+      "sha256": "558f73862bb129507f0e6db14ce16f1b11fbfb13e015771ddfaeff8613c76ad0"
+    },
+    "claude-design.js": {
+      "exists": true,
+      "bytes": 17528,
+      "sha256": "3c6deedbe21f5a33963198a383caa00e16da8313ea51c9bf34ae24686857bb6d"
+    },
+    "claude-design.css": {
+      "exists": true,
+      "bytes": 246691,
+      "sha256": "27c6fb558ee618457e4d670f69500abc998f70dce1cf0287ee732875fee2c4b0"
+    },
+    "motion-studio.js": {
+      "exists": true,
+      "bytes": 9522,
+      "sha256": "082ccea305fccd36fc252bc793b4ab109370091018f545f8efacdcf001135b85"
+    },
+    "inline-admin.js": {
+      "exists": true,
+      "bytes": 164094,
+      "sha256": "fe70e1a60d71b2992f01d0c3c3be774ca0676d088f993ef47950c98c62105a44"
+    },
+    "admin-popup.js": {
+      "exists": true,
+      "bytes": 21474,
+      "sha256": "35c1b7344fbe16a6db47577050ff13fb3fa285a0601669dadaac5d23159e37ea"
+    },
+    "index.html": {
+      "exists": true,
+      "bytes": 7949,
+      "sha256": "85d81805ff6b99d957c593ae3e39199677289d595383e024c42027a582e86f17"
+    },
+    "home.js": {
+      "exists": true,
+      "bytes": 4385,
+      "sha256": "ad20c22288e4f25e9f7625f0242903ecc616e83881941a906e16d4c61edd80ad"
+    },
+    "portal-core-v1141.js": {
+      "exists": true,
+      "bytes": 147990,
+      "sha256": "f5239a439eba1b8d4c2c8f7e7d12d79a798a41d560cf718c129fa49ee3b8dfa1"
+    },
+    "firebase-service.js": {
+      "exists": true,
+      "bytes": 30846,
+      "sha256": "22310c464bd1cee39d893143028047535ca5247afb5c347d3e303ebb6e19ba2e"
+    }
+  }
+}
